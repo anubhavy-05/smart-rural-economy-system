@@ -1,0 +1,1 @@
+# smart-rural-economy-system
