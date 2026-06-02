@@ -85,3 +85,18 @@ def predict_crop_price(request: Request, data: CropInput, db: Session = Depends(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+        # 6. History GET Endpoint (Database se data nikalne ke liye)
+@app.get("/prediction-history")
+def get_prediction_history(limit: int = 10, db: Session = Depends(get_db)):
+    try:
+        # SQLAlchemy Query: CropPrediction table se data lao, ID ke hisaab se ulta (latest pehle), aur limit lagao
+        records = db.query(models.CropPrediction).order_by(models.CropPrediction.id.desc()).limit(limit).all()
+        
+        return {
+            "status": "success",
+            "total_records_returned": len(records),
+            "data": records
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
